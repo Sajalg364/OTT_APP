@@ -5,10 +5,12 @@ import { apiKey } from "../constants";
 // endpoints
 const apiBaseUrl = 'https://api.themoviedb.org/3';
 const trendingMoviesEndpoint = `${apiBaseUrl}/trending/movie/day?api_key=${apiKey}`;
+const trendingShowsEndpoint = `${apiBaseUrl}/trending/tv/day?api_key=${apiKey}`;
+// const trendingShowsEndpoint = `${apiBaseUrl}/tv/top_rated?api_key=${apiKey}`;
 const upcomingMoviesEndpoint = `${apiBaseUrl}/movie/upcoming?api_key=${apiKey}`;
 const topRatedMoviesEndpoint = `${apiBaseUrl}/movie/top_rated?api_key=${apiKey}`;
+const topRatedShowsEndpoint = `${apiBaseUrl}/tv/top_rated?api_key=${apiKey}`;
 const searchMoviesEndpoint = `${apiBaseUrl}/search/movie?api_key=${apiKey}`;
-
 
 // endpoints with dynamic params
 
@@ -16,6 +18,7 @@ const searchMoviesEndpoint = `${apiBaseUrl}/search/movie?api_key=${apiKey}`;
 const movieDetailsEndpoint = id=> `${apiBaseUrl}/movie/${id}?api_key=${apiKey}`;
 const movieCreditsEndpoint = id=> `${apiBaseUrl}/movie/${id}/credits?api_key=${apiKey}`;
 const similarMoviesEndpoint = id=> `${apiBaseUrl}/movie/${id}/similar?api_key=${apiKey}`;
+const reviewsMoviesEndpoint = id=> `${apiBaseUrl}/movie/${id}/reviews?api_key=${apiKey}`;
 
 // person
 const personDetailsEndpoint = id=> `${apiBaseUrl}/person/${id}?api_key=${apiKey}`;
@@ -51,11 +54,17 @@ const apiCall = async (endpoint, params)=>{
 export const fetchTrendingMovies = ()=>{
     return apiCall(trendingMoviesEndpoint);
 }
+export const fetchTrendingShows = ()=>{
+    return apiCall(trendingShowsEndpoint);
+}
 export const fetchUpcomingMovies = ()=>{
     return apiCall(upcomingMoviesEndpoint);
 }
 export const fetchTopRatedMovies = ()=>{
     return apiCall(topRatedMoviesEndpoint);
+}
+export const fetchTopRatedShows = ()=>{
+    return apiCall(topRatedShowsEndpoint);
 }
 
 
@@ -68,6 +77,9 @@ export const fetchMovieCredits = (movieId)=>{
 }
 export const fetchSimilarMovies = (movieId)=>{
     return apiCall(similarMoviesEndpoint(movieId));
+}
+export const fetchReviews = (movieId)=>{
+    return apiCall(reviewsMoviesEndpoint(movieId));
 }
 
 // person screen apis

@@ -6,8 +6,9 @@ import { ArrowLeftIcon, ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { HeartIcon} from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Cast from '../components/cast';
+import Review from '../components/review';
 import MovieList from '../components/movieList';
-import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, image500 } from '../api/moviedb';
+import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, fetchReviews, image500 } from '../api/moviedb';
 import { styles, theme } from '../theme';
 import Loading from '../components/loading';
 
@@ -20,7 +21,8 @@ export default function MovieScreen() {
   const navigation = useNavigation();
   const [movie, setMovie] = useState({});
   const [cast, setCast] = useState([])
-  const [similarMovies, setSimilarMovies] = useState([])
+  const [similarMovies, setSimilarMovies] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [isFavourite, toggleFavourite] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -31,6 +33,7 @@ export default function MovieScreen() {
     getMovieDetials(item.id);
     getMovieCredits(item.id);
     getSimilarMovies(item.id);
+    getReviews(item.id);
   },[item]);
 
   const getMovieDetials = async id=>{
@@ -55,8 +58,15 @@ export default function MovieScreen() {
     if(data && data.results){
         setSimilarMovies(data.results);
     }
+    }
+  const getReviews = async id=>{
+    const data = await fetchReviews(id);
+    console.log('got reviews');
+    if(data && data.results){
+        setReviews(data.results);
+      }
+    }
 
-  }
   return (
     <ScrollView 
         contentContainerStyle={{paddingBottom: 20}} 
@@ -144,14 +154,24 @@ export default function MovieScreen() {
         
       
       {/* cast */}
-      {/* {
+      {
         movie?.id && cast.length>0 && <Cast navigation={navigation} cast={cast} />
-      } */}
+      }
       
       {/* similar movies section */}
-      {/* {
+      {
         movie?.id && similarMovies.length>0 && <MovieList title={'Similar Movies'} hideSeeAll={true} data={similarMovies} />
-      } */}
+      }
+
+      {/* Reviews */}
+      {
+        movie?.id && reviews.length>0 && <Review navigation={navigation} reviews={reviews} />
+      }
+
+    { reviews.length == 0 && 
+        (<View>
+            <Text className="text-white text-lg mx-4 mb-5">No Reviews</Text>
+        </View>)}
 
     </ScrollView>
   )

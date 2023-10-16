@@ -1,11 +1,14 @@
-import { View, Text, TouchableOpacity, ScrollView, Platform } from 'react-native'
+import { View, Text, ScrollView,TouchableOpacity , Platform, } from 'react-native'
+// import { TouchableOpacity} from 'react-native-gesture-handler'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Bars3CenterLeftIcon, MagnifyingGlassIcon} from 'react-native-heroicons/outline'
 import TrendingMovies from '../components/trendingMovies';
+import TrendingShows from '../components/trendingShows';
+import ShowList from '../components/showList';
 import MovieList from '../components/movieList';
 import { StatusBar } from 'expo-status-bar';
-import { fetchTopRatedMovies, fetchTrendingMovies, fetchUpcomingMovies } from '../api/moviedb';
+import { fetchTopRatedMovies, fetchTrendingMovies, fetchTrendingShows, fetchUpcomingMovies, fetchTopRatedShows } from '../api/moviedb';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/loading';
 import { styles } from '../theme';
@@ -15,22 +18,35 @@ const ios = Platform.OS === 'ios';
 export default function HomeScreen() {
 
   const [trending, setTrending] = useState([]);
+  const [trending2, setTrending2] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
   const [topRated, setTopRated] = useState([]);
+  const [topRated2, setTopRated2] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
+  const [toggle,setToggle] = useState(true); 
+  let color1 = toggle?'red':'grey';
+  let color2 = toggle?'grey':'red';
 
   useEffect(()=>{
     getTrendingMovies();
+    getTrendingShows();
     getUpcomingMovies();
     getTopRatedMovies();
+    getTopRatedShows();
   },[]);
 
   const getTrendingMovies = async ()=>{
     const data = await fetchTrendingMovies();
     console.log('got trending', data.results.length)
     if(data && data.results) setTrending(data.results);
+    setLoading(false)
+  }
+  const getTrendingShows = async ()=>{
+    const data = await fetchTrendingShows();
+    console.log('got trending2', data.results.length)
+    if(data && data.results) setTrending2(data.results);
     setLoading(false)
   }
   const getUpcomingMovies = async ()=>{
@@ -43,8 +59,11 @@ export default function HomeScreen() {
     console.log('got top rated', data.results.length)
     if(data && data.results) setTopRated(data.results);
   }
-
-
+  const getTopRatedShows = async ()=>{
+    const data = await fetchTopRatedShows();
+    console.log('got top rated', data.results.length)
+    if(data && data.results) setTopRated2(data.results);
+  }
 
   return (
     <View className="flex-1 bg-neutral-800">
@@ -62,6 +81,15 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
+
+      <View style={{flexDirection:'row',justifyContent:'space-around',backgroundColor:'white',padding:10,marginBottom:10, borderRadius:10,elevation:20,shadowColor:'white'}}>
+        <TouchableOpacity onPress={()=> setToggle(true)}>
+          <Text style={{color:color1}} className={"font-bold"}>Movies</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=> setToggle(false)}>
+          <Text style={{color:color2}} className={"font-bold"}>Web Series</Text>
+        </TouchableOpacity>
+      </View>
       {
         loading? (
           <Loading />
@@ -70,24 +98,31 @@ export default function HomeScreen() {
             showsVerticalScrollIndicator={false} 
             contentContainerStyle={{paddingBottom: 10}}
           >
+          {
+            toggle ? (<View>
+              {/* Trending Movies Carousel */}
+              { trending.length>0 && <TrendingMovies data={trending} /> }
 
-            {/* Trending Movies Carousel */}
-            { trending.length>0 && <TrendingMovies data={trending} /> }
+              {/* upcoming movies row */}
+              { upcoming.length>0 && <MovieList title="Upcoming" data={upcoming} /> }
+              
+              {/* top rated movies row */}
+              { topRated.length>0 && <MovieList title="Top Rated" data={topRated} /> }
 
-            {/* upcoming movies row */}
-            { upcoming.length>0 && <MovieList title="Upcoming" data={upcoming} /> }
-            
+            </View> ):
+            (
+              <View>
+                {/* Trending Web Series Carousel */}
+                { trending2.length>0 && <TrendingShows data={trending2} /> }
 
-            {/* top rated movies row */}
-            { topRated.length>0 && <MovieList title="Top Rated" data={topRated} /> }
-
+                {/* top rated shows row */}
+                { topRated2.length>0 && <ShowList title="Top Rated" data={topRated2} /> }
+              </View>
+            )
+          } 
           </ScrollView>
         )
       }
-      
   </View>
-      
-
-   
   )
 }
