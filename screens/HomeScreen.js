@@ -116,7 +116,7 @@ export default function HomeScreen() {
                 { trending2.length>0 && <TrendingShows data={trending2} /> }
 
                 {/* top rated shows row */}
-                { topRated2.length>0 && <ShowList title="Top Rated" data={topRated2} /> }
+                { topRated2.length>0 && <ShowList title="Top Rated" data={topRated2} />}
               </View>
             )
           } 

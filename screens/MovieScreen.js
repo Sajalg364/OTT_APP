@@ -1,5 +1,5 @@
 import { View, Text, Image, Dimensions, TouchableOpacity, ScrollView, Platform } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { ArrowLeftIcon, ChevronLeftIcon } from 'react-native-heroicons/outline';
@@ -11,6 +11,7 @@ import MovieList from '../components/movieList';
 import { fallbackMoviePoster, fetchMovieCredits, fetchMovieDetails, fetchSimilarMovies, fetchReviews, image500 } from '../api/moviedb';
 import { styles, theme } from '../theme';
 import Loading from '../components/loading';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const ios = Platform.OS == 'ios';
 const topMargin = ios? '':' mt-3';
@@ -25,8 +26,31 @@ export default function MovieScreen() {
   const [reviews, setReviews] = useState([]);
   const [isFavourite, toggleFavourite] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [player, setPlayer] = useState(false);
+
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      // Alert.alert("video has finished playing!");
+    }
+  }, []);
 
 
+  //YouTube Trailer
+  const renderTrailer = () => {
+    const trailer = movie.videos.results.find(vid => vid.name === 'Official Trailer')
+
+    return (
+      <YoutubePlayer
+      height={230}
+      play={playing}
+      videoId={trailer.key}
+      onChangeState={onStateChange}
+      style={{top:0}}
+      />
+    )
+  }
 
   useEffect(()=>{
     setLoading(true);
@@ -103,25 +127,29 @@ export default function MovieScreen() {
                 </View>
             )
         }
-       
-        
-        
       </View>
-        
+
       {/* movie details */}
       
-      <View style={{marginTop: -(height*0.09)}} className="space-y-3">
+      <View style={{marginTop: (player? -4.73 : -1)*(height*0.09)}} className="space-y-3">
+        {movie.videos && player ? renderTrailer() : null}
+
+        <TouchableOpacity onPress={()=> setPlayer(true)} style={{borderRadius:5,backgroundColor:'white', width:100, marginLeft:18, paddingVertical:6}}>
+          <Text style={{color:'red'}}className="text-primary text-bold text-center">Play Trailer</Text>
+        </TouchableOpacity>
+
         {/* title */}
-        <Text className="text-white text-center text-3xl font-bold tracking-widest">
+        <Text className="text-white text-start text-3xl font-bold tracking-widest ml-4">
             {
                 movie?.title
             }
         </Text>
 
+
         {/* status, release year, runtime */}
         {
             movie?.id? (
-                <Text className="text-neutral-400 font-semibold text-base text-center">
+                <Text className="text-neutral-400 font-semibold text-base text-start ml-4">
                     {movie?.status} • {movie?.release_date?.split('-')[0] || 'N/A'} • {movie?.runtime} min
                 </Text>
             ):null
@@ -130,12 +158,12 @@ export default function MovieScreen() {
 
         
         {/* genres  */}
-        <View className="flex-row justify-center mx-4 space-x-2">
+        <View className="flex-row space-x-2">
             {
                 movie?.genres?.map((genre,index)=>{
                     let showDot = index+1 != movie.genres.length;
                     return (
-                        <Text key={index} className="text-neutral-400 font-semibold text-base text-center">
+                        <Text key={index} className="text-neutral-400 font-semibold text-base text-start ml-4">
                             {genre?.name} {showDot? "•":null}
                         </Text>
                     )
@@ -172,7 +200,6 @@ export default function MovieScreen() {
         (<View>
             <Text className="text-white text-lg mx-4 mb-5">No Reviews</Text>
         </View>)}
-
     </ScrollView>
   )
 }

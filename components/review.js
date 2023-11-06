@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     },
     ReviewName: {
         fontSize: width / 24.438,
-        fontFamily: 'SF-Pro-Text-Medium',
+        // fontFamily: 'SF-Pro-Text-Medium',
         color: 'red',
         marginLeft: width / 39.1,
     },
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     },
     ReviewDate: {
         fontSize: width / 32.58,
-        fontFamily: 'SF-Pro-Text-Regular',
+        // fontFamily: 'SF-Pro-Text-Regular',
         color: 'grey',
         letterSpacing: 0.7,
     },

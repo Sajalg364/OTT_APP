@@ -15,7 +15,7 @@ const searchMoviesEndpoint = `${apiBaseUrl}/search/movie?api_key=${apiKey}`;
 // endpoints with dynamic params
 
 // movie
-const movieDetailsEndpoint = id=> `${apiBaseUrl}/movie/${id}?api_key=${apiKey}`;
+const movieDetailsEndpoint = id=> `${apiBaseUrl}/movie/${id}?api_key=${apiKey}&append_to_response=videos`;
 const movieCreditsEndpoint = id=> `${apiBaseUrl}/movie/${id}/credits?api_key=${apiKey}`;
 const similarMoviesEndpoint = id=> `${apiBaseUrl}/movie/${id}/similar?api_key=${apiKey}`;
 const reviewsMoviesEndpoint = id=> `${apiBaseUrl}/movie/${id}/reviews?api_key=${apiKey}`;
