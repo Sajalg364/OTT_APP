@@ -19,6 +19,29 @@
 
 ```
 Insert your app screenshots here
+<div align="center">
+
+### Light Mode
+<p float="left">
+  <img src="./.github/screenshots/light-home.png" width="200" alt="Home Screen"/>
+  <img src="./.github/screenshots/light-browse.png" width="200" alt="Browse Screen"/>
+  <img src="./.github/screenshots/light-player.png" width="200" alt="Player Screen"/>
+  <img src="./.github/screenshots/light-profile.png" width="200" alt="Profile Screen"/>
+</p>
+
+### Dark Mode
+<p float="left">
+  <img src="./.github/screenshots/dark-home.png" width="200" alt="Home Screen Dark"/>
+  <img src="./.github/screenshots/dark-browse.png" width="200" alt="Browse Screen Dark"/>
+  <img src="./.github/screenshots/dark-player.png" width="200" alt="Player Screen Dark"/>
+  <img src="./.github/screenshots/dark-profile.png" width="200" alt="Profile Screen Dark"/>
+</p>
+
+### App Store Preview
+[<img src="./.github/badges/app-store.png" width="200" alt="Download on App Store">](https://apps.apple.com/app/yourapp)
+[<img src="./.github/badges/play-store.png" width="200" alt="Get it on Play Store">](https://play.google.com/store/apps/details?id=com.yourapp)
+
+</div>
 ```
 
 ## ✨ Features
